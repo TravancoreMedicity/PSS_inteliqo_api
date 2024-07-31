@@ -1659,6 +1659,7 @@ module.exports = {
                             data: []
                         });
                     }
+
                     // console.log(punchMasterData)
                     if (punchMasterData === null && punchMasterData === undefined && punchMasterData?.length === 0) {
                         // logger.infoLogger("No Records Found")

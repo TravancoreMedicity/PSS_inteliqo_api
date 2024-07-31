@@ -184,6 +184,7 @@ module.exports = {
                 shft_code,
                 shft_chkin_time as checkInTime,
                 shft_chkout_time as checkOutTime,
+                   shft_duty_day,
                 DATE_FORMAT(shft_chkin_time,"%H %i")shft_chkin_time,
                 DATE_FORMAT(shft_chkout_time,"%H %i")shft_chkout_time,
                 if(shft_status = 1 ,'Active','In Active') shft_status,

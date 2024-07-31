@@ -531,7 +531,7 @@ module.exports = {
     },
     getPunchMastData: (data, callBack) => {
         pool.query(
-            `SELECT 
+            `     SELECT 
                 punch_slno,
                 duty_day,
                 shift_id,
@@ -550,13 +550,12 @@ module.exports = {
                 leave_status,
                 lvereq_desc,
                 lve_tble_updation_flag
-            FROM punch_master 
-            WHERE duty_day BETWEEN ? AND ? 
-            AND em_no IN (?)`,
+            FROM med_hrm_pass_29042024.punch_master 
+            WHERE  em_no IN (?) and date(duty_day) between date(?) and date(?)`,
             [
+                data.empList,
                 data.fromDate_punchMaster,
                 data.toDate_punchMaster,
-                data.empList
             ],
             (error, results, feilds) => {
                 // console.log(results)
@@ -1229,7 +1228,7 @@ module.exports = {
     // lvereq_desc,
     // lve_tble_updation_flag
     getPData: (data, callBack) => {
-        // console.log(data)
+        // console.log("data", data)
         pool.query(
             `SELECT 
                 punch_slno,
