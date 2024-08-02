@@ -65,18 +65,33 @@ module.exports = {
     },
     getnightoffdata: (data, callBack) => {
         pool.query(
-            `select hrm_shift_mast.night_off_flag,shift_id,duty_status,duty_desc from  punch_master 
-            left join hrm_shift_mast on punch_master.shift_id=hrm_shift_mast.shft_slno
-            where  em_no=? and date(punch_master.duty_day) between ? and ?
-             and hrm_shift_mast.night_off_flag=1 and duty_status>=1 and punch_master.noff_flag!=1`,
+            `           SELECT
+    hsm.night_off_flag,
+    pm.shift_id,
+    pm.duty_status,
+    pm.duty_desc
+  FROM
+    punch_master pm
+  LEFT JOIN
+    hrm_shift_mast hsm ON pm.shift_id = hsm.shft_slno
+  WHERE
+    pm.em_no = ?
+    AND DATE(pm.duty_day) BETWEEN ? AND ?
+    AND hsm.night_off_flag = 1
+    AND pm.duty_status >= 1
+    AND pm.noff_flag != 1;`
+            // `select hrm_shift_mast.night_off_flag,shift_id,duty_status,duty_desc from  punch_master 
+            // left join hrm_shift_mast on punch_master.shift_id=hrm_shift_mast.shft_slno
+            // where  em_no=? and date(punch_master.duty_day) between ? and ?
+            //  and hrm_shift_mast.night_off_flag=1 and duty_status>=1 and punch_master.noff_flag!=1`,
 
             // `SELECT night_off_flag, shift_id, duty_status FROM medi_hrm.punch_master
             // left join hrm_shift_mast on punch_master.shift_id=hrm_shift_mast.shft_slno
             // where emp_id=? and date(duty_day)between ? and ? and night_off_flag=1;`,
             [
-                data.em_no,
-                data.fromDate,
-                data.todate
+            data.em_no,
+            data.fromDate,
+            data.todate
             ],
             (error, results, feilds) => {
                 if (error) {
