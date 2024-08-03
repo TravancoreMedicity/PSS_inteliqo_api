@@ -30,9 +30,10 @@ module.exports = {
                 shift_start_in_min,
                 shift_end_in_min,
                 night_off_flag,
-                shft_status
+                shft_status,
+                break_shift_status
             )
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
             [
                 data.shft_desc,
                 data.shft_code,
@@ -60,7 +61,8 @@ module.exports = {
                 data.shift_start_in_min,
                 data.shift_end_in_min,
                 data.night_off_flag,
-                data.shft_status
+                data.shft_status,
+                data.break_shift_status
             ],
             (error, results, feilds) => {
                 if (error) {
@@ -93,6 +95,8 @@ module.exports = {
     },
 
     update: (data, callBack) => {
+        console.log(data);
+
         pool.query(
             `UPDATE hrm_shift_mast
                 SET shft_desc = ?,
@@ -121,7 +125,8 @@ module.exports = {
                     shift_start_in_min=?,
                     shift_end_in_min=?,
                     night_off_flag=?,
-                    shft_status=?
+                    shft_status=?,
+                    break_shift_status=?
                 WHERE shft_slno =?`,
             [
                 data.shft_desc,
@@ -151,6 +156,7 @@ module.exports = {
                 data.shift_end_in_min,
                 data.night_off_flag,
                 data.shft_status,
+                data.break_shift_status,
                 data.shft_slno
             ],
             (error, results, feilds) => {
@@ -178,13 +184,14 @@ module.exports = {
     getData: (callBack) => {
 
         pool.query(
-            `SELECT 
+            `
+                SELECT 
                 shft_slno,
                 shft_desc,
                 shft_code,
                 shft_chkin_time as checkInTime,
                 shft_chkout_time as checkOutTime,
-                   shft_duty_day,
+                shft_duty_day,
                 DATE_FORMAT(shft_chkin_time,"%H %i")shft_chkin_time,
                 DATE_FORMAT(shft_chkout_time,"%H %i")shft_chkout_time,
                 if(shft_status = 1 ,'Active','In Active') shft_status,
@@ -193,8 +200,10 @@ module.exports = {
                 shft_chkin_end,
                 shft_chkout_start,
                 shft_chkout_end,
-                shft_status
-            FROM hrm_shift_mast`,
+                shft_status,
+                break_shift_status
+                FROM hrm_shift_mast
+`,
             [],
             (error, results, feilds) => {
                 if (error) {
@@ -232,7 +241,8 @@ module.exports = {
                 second_half_out,
                 shft_status,
                 night_off_flag,
-                shift_duration_in_min
+                shift_duration_in_min,
+                break_shift_status
             FROM hrm_shift_mast
             WHERE shft_slno = ?`,
             [
