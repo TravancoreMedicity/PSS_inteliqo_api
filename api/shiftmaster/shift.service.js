@@ -201,9 +201,13 @@ module.exports = {
                 shft_chkout_start,
                 shft_chkout_end,
                 shft_status,
-                break_shift_status
+                break_shift_status,
+                first_half_in,
+                first_half_out,
+                second_half_in,
+                second_half_out
                 FROM hrm_shift_mast
-`,
+            `,
             [],
             (error, results, feilds) => {
                 if (error) {
