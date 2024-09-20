@@ -411,7 +411,10 @@ const validateshiftmaster = Joi.object({
         shift_duration_in_min: Joi.number().optional(),
         shift_start_in_min: Joi.number().optional(),
         shift_end_in_min: Joi.number().optional(),
-        night_off_flag: Joi.number().optional()
+        night_off_flag: Joi.number().optional(),
+        break_shift_status: Joi.number().optional(),
+        noff_min_days: Joi.number().optional(),
+        noff_max_days: Joi.number().optional(),
 
 })
 
@@ -1220,7 +1223,8 @@ const validatecommonsettings = Joi.object({
         holiday_policy_count: Joi.number().optional(),
         weekoff_policy_max_count: Joi.number().optional(),
         weekoff_policy_min_count: Joi.number().optional(),
-        coff_min_working_hour: Joi.number().optional()
+        coff_min_working_hour: Joi.number().optional(),
+        break_shift_taken_count: Joi.number().optional()
 
 
 })
