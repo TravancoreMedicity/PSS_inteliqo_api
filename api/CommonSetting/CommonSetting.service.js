@@ -46,9 +46,10 @@ module.exports = {
                 weekoff_policy_max_count,
                 weekoff_policy_min_count,
                 coff_min_working_hour,
-                training_mastergroup
+                training_mastergroup,
+                break_shift_taken_count
                 )
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
         )
 
         [
@@ -94,7 +95,8 @@ module.exports = {
             data.holiday_policy_count,
             data.weekoff_policy_max_count,
             data.weekoff_policy_min_count,
-            data.coff_min_working_hour
+            data.coff_min_working_hour,
+            data.break_shift_taken_count
         ],
             (error, results, feilds) => {
                 if (error) {
@@ -161,7 +163,8 @@ module.exports = {
                 weekoff_policy_max_count=?,
                 weekoff_policy_min_count=?,
                 coff_min_working_hour=?,
-                training_mastergroup=?
+                training_mastergroup=?,
+                break_shift_taken_count=?
                 WHERE setting_slno =?`,
 
             [
@@ -208,6 +211,7 @@ module.exports = {
                 data.weekoff_policy_min_count,
                 data.coff_min_working_hour,
                 JSON.stringify(data.training_mastergroup),
+                data.break_shift_taken_count,
                 data.setting_slno
             ],
             (error, results, feilds) => {

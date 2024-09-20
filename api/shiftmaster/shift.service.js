@@ -31,9 +31,11 @@ module.exports = {
                 shift_end_in_min,
                 night_off_flag,
                 shft_status,
-                break_shift_status
+                break_shift_status,
+                noff_min_days,
+                noff_max_days
             )
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
             [
                 data.shft_desc,
                 data.shft_code,
@@ -62,7 +64,9 @@ module.exports = {
                 data.shift_end_in_min,
                 data.night_off_flag,
                 data.shft_status,
-                data.break_shift_status
+                data.break_shift_status,
+                data.noff_min_days,
+                data.noff_max_days
             ],
             (error, results, feilds) => {
                 if (error) {
@@ -95,8 +99,6 @@ module.exports = {
     },
 
     update: (data, callBack) => {
-        console.log(data);
-
         pool.query(
             `UPDATE hrm_shift_mast
                 SET shft_desc = ?,
@@ -126,7 +128,9 @@ module.exports = {
                     shift_end_in_min=?,
                     night_off_flag=?,
                     shft_status=?,
-                    break_shift_status=?
+                    break_shift_status=?,
+                    noff_min_days=?,
+                    noff_max_days=?
                 WHERE shft_slno =?`,
             [
                 data.shft_desc,
@@ -157,6 +161,8 @@ module.exports = {
                 data.night_off_flag,
                 data.shft_status,
                 data.break_shift_status,
+                data.noff_min_days,
+                data.noff_max_days,
                 data.shft_slno
             ],
             (error, results, feilds) => {
@@ -205,7 +211,12 @@ module.exports = {
                 first_half_in,
                 first_half_out,
                 second_half_in,
-                second_half_out
+                second_half_out,
+                noff_min_days,
+                noff_max_days,
+                noff_min_days,
+                noff_max_days,
+                night_off_flag
                 FROM hrm_shift_mast
             `,
             [],
@@ -246,7 +257,9 @@ module.exports = {
                 shft_status,
                 night_off_flag,
                 shift_duration_in_min,
-                break_shift_status
+                break_shift_status,
+                noff_min_days,
+                noff_max_days
             FROM hrm_shift_mast
             WHERE shft_slno = ?`,
             [

@@ -65,10 +65,17 @@ module.exports = {
     },
     getnightoffdata: (data, callBack) => {
         pool.query(
-            `select hrm_shift_mast.night_off_flag,shift_id,duty_status,duty_desc from  punch_master 
+            // `select hrm_shift_mast.night_off_flag,shift_id,duty_status,duty_desc from  punch_master
+            //  left join hrm_shift_mast on punch_master.shift_id=hrm_shift_mast.shft_slno
+            //  where  em_no=? and date(punch_master.duty_day) between ? AND ?
+            //  and hrm_shift_mast.night_off_flag=1 and duty_status>=1 and punch_master.noff_flag!=1`,
+            `
+               select hrm_shift_mast.night_off_flag,shift_id,duty_status,duty_desc,duty_day,shft_desc,lve_tble_updation_flag,noff_flag,
+             punch_in,punch_out
+             from  punch_master 
              left join hrm_shift_mast on punch_master.shift_id=hrm_shift_mast.shft_slno
              where  em_no=? and date(punch_master.duty_day) between ? AND ?
-             and hrm_shift_mast.night_off_flag=1 and duty_status>=1 and punch_master.noff_flag!=1`,
+             and hrm_shift_mast.night_off_flag=1 and duty_status>=1 and punch_master.noff_flag!=1 `,
             [
                 data.em_no,
                 data.fromDate,
@@ -119,6 +126,50 @@ module.exports = {
         )
 
     },
+    checkNOFFExistORNot: (data, callback) => {
+        pool.query(
+            `     
+           select hrm_shift_mast.night_off_flag,shift_id,duty_status,duty_desc,duty_day,shft_desc,lve_tble_updation_flag,noff_flag,
+             punch_in,punch_out
+             from  punch_master 
+             left join hrm_shift_mast on punch_master.shift_id=hrm_shift_mast.shft_slno
+             where  em_no=? and date(punch_master.duty_day) =? and duty_desc='NOFF'
+             and punch_master.lve_tble_updation_flag=1 and duty_status=1
+            `, [
+            data.em_no,
+            data.requiredate
+        ],
+
+            (err, results, feilds) => {
+                if (err) {
+                    return callback(err)
+
+                }
+                return callback(null, results)
+            }
+        )
+    },
+    // checkNoFF: (data, callBack) => {
+    //     pool.query(
+    //         `select hrm_shift_mast.night_off_flag,shift_id,duty_status,duty_desc,duty_day,shft_desc,lve_tble_updation_flag,noff_flag,
+    //          punch_in,punch_out
+    //          from  punch_master 
+    //          left join hrm_shift_mast on punch_master.shift_id=hrm_shift_mast.shft_slno
+    //          where  em_no=? and date(punch_master.duty_day) =? and duty_desc='NOFF'
+    //          and punch_master.lve_tble_updation_flag=1 and duty_status=1`,
+    //         [
+    //             data.em_no,
+    //             data.requiredate
+    //         ],
+    //         (error, results, feilds) => {
+    //             if (error) {
+    //                 return callBack(error);
+    //             }
+    //             return callBack(null, results);
+    //         }
+    //     )
+
+    // },
     updatePuchMastNoff: (data, callBack) => {
         pool.query(
             `update punch_master 
@@ -174,5 +225,26 @@ module.exports = {
         )
 
     },
+    GetNoffDetails: (data, callBack) => {
+        pool.query(
+            `select punch_master.em_no,punch_master.emp_id,duty_day, lvereq_desc,duty_desc,duty_status,lve_tble_updation_flag,
+             hrm_department.dept_name,hrm_emp_master.em_name
+             from punch_master
+             left Join hrm_emp_master on hrm_emp_master.em_id=punch_master.emp_id
+             left join hrm_department on hrm_department.dept_id=hrm_emp_master.em_department
+             where punch_master.em_no=? and lve_tble_updation_flag=1`,
+            [
+                data.emp_no
+            ],
+            (error, results, feilds) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        )
+
+    },
+
 
 }

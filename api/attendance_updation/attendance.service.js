@@ -170,7 +170,7 @@ module.exports = {
             FROM punch_master 
            left join hrm_shift_mast on hrm_shift_mast.shft_slno =punch_master.shift_id
             left join hrm_emp_master on hrm_emp_master.em_id=punch_master.emp_id
-            where duty_day between ? and ? and punch_master.em_no in(?);`,
+            where duty_day between ? and ? and punch_master.em_no in(?)`,
             [
                 data.startDate, data.endDate, data.emdno
             ],
@@ -480,7 +480,7 @@ module.exports = {
                 punch_time,
                 punch_state
             FROM punch_data
-            WHERE punch_time 
+            WHERE punch_time
             BETWEEN ? AND ? AND emp_code IN (?)`,
             [
                 data.preFromDate,
@@ -488,6 +488,7 @@ module.exports = {
                 data.empList
             ],
             (error, results, feilds) => {
+
                 if (error) {
                     return callBack(error);
                 }
@@ -550,8 +551,8 @@ module.exports = {
                 leave_status,
                 lvereq_desc,
                 lve_tble_updation_flag
-            FROM med_hrm_pass_29042024.punch_master 
-            WHERE  em_no IN (?) and date(duty_day) between date(?) and date(?)`,
+            FROM punch_master 
+            WHERE em_no IN (?) and date(duty_day) between date(?) and date(?)`,
             [
                 data.empList,
                 data.fromDate_punchMaster,
