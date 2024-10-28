@@ -837,7 +837,7 @@ module.exports = {
                 ot_amount,
                 holiday_status,
                 holiday_slno,
-                ot_request_flag
+                ot_request_flag,lve_tble_updation_flag
             FROM punch_master
             LEFT JOIN hrm_shift_mast ON hrm_shift_mast.shft_slno=punch_master.shift_id
             LEFT JOIN hrm_emp_master ON hrm_emp_master.em_id = punch_master.emp_id
@@ -1717,6 +1717,20 @@ module.exports = {
             and em_status=1 and em_id!=1 and em_no!=2 `,
             [
                 data
+            ],
+            (error, results, feilds) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        )
+    },
+    getShiftTimeById: (data, callBack) => {
+        pool.query(
+            `SELECT * FROM hrm_shift_mast where shft_slno=? `,
+            [
+                data.shft_slno
             ],
             (error, results, feilds) => {
                 if (error) {

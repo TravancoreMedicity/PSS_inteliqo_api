@@ -1224,9 +1224,9 @@ const validatecommonsettings = Joi.object({
         weekoff_policy_max_count: Joi.number().optional(),
         weekoff_policy_min_count: Joi.number().optional(),
         coff_min_working_hour: Joi.number().optional(),
-        break_shift_taken_count: Joi.number().optional()
-
-
+        break_shift_taken_count: Joi.number().optional(),
+        halfday_time_count: Joi.number().optional(),
+        punch_taken_hour_count: Joi.number().optional(),
 })
 //validate carryforward
 const validatecarryforward = Joi.object({

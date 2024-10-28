@@ -11,7 +11,7 @@ const { validateAttendance, processAttendData, getpunchmastcalcu,
     getPunchDataEmCodeWiseDateWise, getDutyPlanBySection, getPunchMasterDataSectionWise,
     updatePunchMaster, updatePunchMarkingHR, updateDutyPlanTable, updateDelStatDutyPlanTable, checkPunchMarkingHR,
     getPunchReportLCCount, updateLCPunchMaster, getPData, monthlyUpdatePunchMaster,
-    updatePunchMasterSingleRow, updatePunchMasterCalCulcated
+    updatePunchMasterSingleRow, updatePunchMasterCalCulcated, InsertWOffPresentDuty, GetWOffPresentData
 } = require("../attendance_updation/attendance.controller")
 
 router.post("/", checkToken, validateAttendance);
@@ -61,5 +61,7 @@ router.post("/updateLCPunchMaster", checkToken, updateLCPunchMaster); // added o
 router.post("/getPData", checkToken, getPData);
 
 router.post("/monthlyUpdatePunchMaster", checkToken, monthlyUpdatePunchMaster);
+router.post("/WOffPresentDuty", checkToken, InsertWOffPresentDuty);
+router.post("/GetWOffPresentData", checkToken, GetWOffPresentData);
 
 module.exports = router;
