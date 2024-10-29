@@ -1310,6 +1310,110 @@ module.exports = {
             }
         })
     },
+    checkWOFFExistORNot: (data, callback) => {
+        pool.query(
+            `     
+           select duty_day,Shift_slno,em_dpt,em_dpt_sect from weekoff_present_log 
+           where em_id=? and date(duty_day)=?
+            `, [
+            data.emID,
+            data.duty_day
+        ],
+            (err, results, feilds) => {
+                if (err) {
+                    return callback(err)
 
+                }
+                return callback(null, results)
+            }
+        )
+    },
+    InsertWOffPresentDuty: (data, callBack) => {
 
+        pool.query(
+            `INSERT INTO weekoff_present_log 
+            (em_id,em_no, duty_day, punch_in, punch_out, Shift_slno, em_dpt, em_dpt_sect, remark, create_user) 
+            VALUES (?,?,?,?,?,?,?,?,?,?)`,
+            [
+                data.emID,
+                data.emNo,
+                data.duty_day,
+                data.punch_in,
+                data.punch_out,
+                data.shiftId,
+                data.deptID,
+                data.sectionID,
+                data.remark,
+                data.create_user
+            ],
+            (error, results, feilds) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        )
+    },
+    GetWOffPresentData: (data, callback) => {
+        pool.query(
+            `SELECT duty_day,Shift_slno,em_dpt,em_dpt_sect ,remark,weekoff_present_log.create_date as requested_date,
+            hrm_dept_section.sect_name,hrm_emp_master.em_no,hrm_emp_master.em_name,hrm_shift_mast.shft_desc
+            FROM weekoff_present_log 
+            LEFT JOIN hrm_dept_section ON hrm_dept_section.sect_id=weekoff_present_log.em_dpt_sect
+            LEFT JOIN hrm_emp_master ON hrm_emp_master.em_id=weekoff_present_log.em_id
+            LEFT JOIN hrm_shift_mast ON hrm_shift_mast.shft_slno=weekoff_present_log.Shift_slno
+            WHERE weekoff_present_log.em_id=? AND weekoff_present_log.em_dpt=? AND weekoff_present_log.em_dpt_sect=?
+            `, [
+            data.emID,
+            data.deptID,
+            data.sectionID
+        ],
+            (err, results, feilds) => {
+                if (err) {
+                    return callback(err)
+
+                }
+                return callback(null, results)
+            }
+        )
+    },
+
+    updatePunchMasterWoffPresent: (data, callBack) => {
+        pool.query(
+            `UPDATE punch_master
+            SET punch_in = ?,
+                punch_out = ?,
+                shift_in=?,
+                shift_out=?,
+                hrs_worked =?,
+                late_in = ?,
+                early_out = ?,
+                duty_status=?,
+                duty_desc=?,
+                lvereq_desc=?,
+                lve_tble_updation_flag = 1
+            WHERE punch_slno = ? `,
+            [
+                data.punch_in,
+                data.punch_out,
+                data.shift_In,
+                data.shift_Out,
+                data.hrs_worked,
+                data.late_in,
+                data.early_out,
+                data.duty_status,
+                data.duty_desc,
+                data.lvereq_desc,
+                data.punch_slno,
+            ],
+            (error, results, feilds) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        )
+    },
 }
+
+

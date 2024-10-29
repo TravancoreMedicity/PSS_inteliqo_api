@@ -16,7 +16,7 @@ const { getEmployeeDetl, getEmployeeShiftDetl, getDepartmentShiftMast,
     sectionwiseEmpDutyplan, checkAttendanceProcessSectionWise, getHolidayListDateWise,
     getPunchDataEmCodeWiseDateWise, getDutyPlanBySection, getPunchMastData, monthlyUpdatePunchMaster,
     updatePunchMaster, updatePunchMarkingHR, updateDutyPlanTable, updateDelStatDutyPlanTable, checkPunchMarkingHR,
-    updatePunchMasterSingleRow, updatePunchMasterCalCulcated, getPunchReportLCCount, updateLCPunchMaster, getPData
+    updatePunchMasterSingleRow, updatePunchMasterCalCulcated, getPunchReportLCCount, updateLCPunchMaster, getPData, InsertWOffPresentDuty, checkWOFFExistORNot, GetWOffPresentData, updatePunchMasterWoffPresent
 } = require("../attendance_updation/attendance.service")
 //SHIFT DETAILS
 //get the shift details 
@@ -1760,5 +1760,114 @@ module.exports = {
                 data: []
             });
         })
+    },
+
+    // InsertWOffPresentDuty: (req, res) => {
+    //     const body = req.body
+    //     InsertWOffPresentDuty(body, (err, results) => {
+    //         if (err) {
+    //             logger.errorLogger(err)
+    //             return res.status(200).json({
+    //                 success: 0,
+    //                 message: err
+    //             });
+    //         }
+
+    //         if (results.length == 0) {
+    //             return res.status(200).json({
+    //                 success: 0,
+    //                 message: "No Record Found"
+    //             });
+    //         }
+
+    //         return res.status(200).json({
+    //             success: 1,
+    //             data: results
+    //         });
+    //     })
+    // },
+
+
+    InsertWOffPresentDuty: (req, res) => {
+        const body = req.body;
+
+        checkWOFFExistORNot(body, (err, result) => {
+            const value = JSON.parse(JSON.stringify(result))
+            if (Object.keys(value).length === 0) {
+
+                InsertWOffPresentDuty(body, (err, result) => {
+                    if (err) {
+                        logger.errorLogger(err)
+                        return res.status(200).json({
+                            success: 0,
+                            message: err
+                        });
+                    }
+                    else {
+                        updatePunchMasterWoffPresent(body, (err, results) => {
+                            if (err) {
+                                logger.errorLogger(err)
+                                return res.status(200).json({
+                                    success: 2,
+                                    message: err
+                                });
+                            }
+                            if (results.length === 0) {
+                                return res.status(200).json({
+                                    success: 0,
+                                    message: "No Record Found",
+                                    data: []
+                                });
+                            }
+                            return res.status(200).json({
+                                success: 1,
+                                message: "WOFF Present Requested Successfully",
+                            });
+                        });
+
+                        // return res.status(200).json({
+                        //     success: 1,
+                        //     message: "WOFF Present Requested Successfully"
+                        // });
+
+                    }
+                })
+            }
+            else {
+                return res.status(200).json({
+                    success: 10,
+                    message: "A WOFF Present has already been taken on the selected date"
+                })
+            }
+        })
+
+    },
+
+    GetWOffPresentData: (req, res) => {
+        const body = req.body;
+        GetWOffPresentData(body, (err, results) => {
+            if (err) {
+                console.log(err);
+
+                logger.errorLogger(err)
+                return res.status(400).json({
+                    success: 0,
+                    message: err
+                });
+            }
+
+            if (results.length == 0) {
+                logger.infoLogger("No Records Found")
+                return res.status(200).json({
+                    success: 0,
+                    message: "No Record Found"
+                });
+            }
+
+            return res.status(200).json({
+                success: 1,
+                data: results
+            });
+        });
     },
 }

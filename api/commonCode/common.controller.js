@@ -70,7 +70,8 @@ const {
     getEmpCoff,
     getgrossSalaryByEmployeeNo,
     getAutharisedDepartmentSection,
-    getEmployeeArraySectionArray
+    getEmployeeArraySectionArray,
+    getShiftTimeById
 } = require('../commonCode/common.service');
 const logger = require('../../logger/logger')
 module.exports = {
@@ -1987,6 +1988,30 @@ module.exports = {
     getEmployeeArraySectionArray: (req, res) => {
         const body = req.body
         getEmployeeArraySectionArray(body, (err, results) => {
+            if (err) {
+                logger.errorLogger(err)
+                return res.status(200).json({
+                    success: 0,
+                    message: err
+                });
+            }
+
+            if (results.length == 0) {
+                return res.status(200).json({
+                    success: 0,
+                    message: "No Record Found"
+                });
+            }
+
+            return res.status(200).json({
+                success: 1,
+                data: results
+            });
+        })
+    },
+    getShiftTimeById: (req, res) => {
+        const body = req.body
+        getShiftTimeById(body, (err, results) => {
             if (err) {
                 logger.errorLogger(err)
                 return res.status(200).json({
