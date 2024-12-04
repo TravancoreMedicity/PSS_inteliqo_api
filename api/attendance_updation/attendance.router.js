@@ -11,7 +11,8 @@ const { validateAttendance, processAttendData, getpunchmastcalcu,
     getPunchDataEmCodeWiseDateWise, getDutyPlanBySection, getPunchMasterDataSectionWise,
     updatePunchMaster, updatePunchMarkingHR, updateDutyPlanTable, updateDelStatDutyPlanTable, checkPunchMarkingHR,
     getPunchReportLCCount, updateLCPunchMaster, getPData, monthlyUpdatePunchMaster,
-    updatePunchMasterSingleRow, updatePunchMasterCalCulcated, InsertWOffPresentDuty, GetWOffPresentData
+    updatePunchMasterSingleRow, updatePunchMasterCalCulcated, InsertWOffPresentDuty, GetWOffPresentData, getPreviousPunchDataEmCodeWise,
+    getPunchMasterDataSectWiseDutyplan, UpdatedNoffStatusInDutyPlan, UpdatedPunchMasterLeavreqStaus
 } = require("../attendance_updation/attendance.controller")
 
 router.post("/", checkToken, validateAttendance);
@@ -46,7 +47,6 @@ router.post("/checkInOutMarked", checkToken, checkInOutMarked)
 router.post("/checkallEmp", checkToken, checkAttendanceProcessDept)
 router.post("/emplist/show", checkToken, getEmpList)
 router.post("/rights", checkToken, getEmployeeRights)
-
 router.post("/sectionwiseEmppunchMast", checkToken, sectionwiseEmppunchMast)
 router.post("/sectionwiseEmpDutyplan", checkToken, sectionwiseEmpDutyplan)
 router.post("/checkAttendanceProcessSectionWise", checkToken, checkAttendanceProcessSectionWise)
@@ -63,5 +63,10 @@ router.post("/getPData", checkToken, getPData);
 router.post("/monthlyUpdatePunchMaster", checkToken, monthlyUpdatePunchMaster);
 router.post("/WOffPresentDuty", checkToken, InsertWOffPresentDuty);
 router.post("/GetWOffPresentData", checkToken, GetWOffPresentData);
+router.post("/getPreviousPunchDataEmCodeWise", checkToken, getPreviousPunchDataEmCodeWise);
+router.post("/getPunchMasterDataSectWiseDutyplan", checkToken, getPunchMasterDataSectWiseDutyplan);
+router.patch("/UpdatedNoffStatusInDutyPlan", checkToken, UpdatedNoffStatusInDutyPlan)
+router.patch("/UpdatedPunchMasterLeavreqStaus", checkToken, UpdatedPunchMasterLeavreqStaus)
+
 
 module.exports = router;

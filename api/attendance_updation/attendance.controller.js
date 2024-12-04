@@ -16,7 +16,8 @@ const { getEmployeeDetl, getEmployeeShiftDetl, getDepartmentShiftMast,
     sectionwiseEmpDutyplan, checkAttendanceProcessSectionWise, getHolidayListDateWise,
     getPunchDataEmCodeWiseDateWise, getDutyPlanBySection, getPunchMastData, monthlyUpdatePunchMaster,
     updatePunchMaster, updatePunchMarkingHR, updateDutyPlanTable, updateDelStatDutyPlanTable, checkPunchMarkingHR,
-    updatePunchMasterSingleRow, updatePunchMasterCalCulcated, getPunchReportLCCount, updateLCPunchMaster, getPData, InsertWOffPresentDuty, checkWOFFExistORNot, GetWOffPresentData, updatePunchMasterWoffPresent
+    updatePunchMasterSingleRow, updatePunchMasterCalCulcated, getPunchReportLCCount, updateLCPunchMaster, getPData, InsertWOffPresentDuty, checkWOFFExistORNot, GetWOffPresentData, updatePunchMasterWoffPresent, getPreviousPunchDataEmCodeWise,
+    getPunchMasterDataSectWiseDutyplan, UpdatedNoffStatusInDutyPlan, UpdatedPunchMasterLeavreqStaus
 } = require("../attendance_updation/attendance.service")
 //SHIFT DETAILS
 //get the shift details 
@@ -1166,32 +1167,99 @@ module.exports = {
 
         });
     },
+
+    //Edited by Jomol George 23-11-2024(03:32 pm )
+
     getDutyPlanBySection: (req, res) => {
         const body = req.body;
-        getDutyPlanBySection(body, (err, results) => {
+
+        // Step 1: Get Duty Plan by Section
+        getDutyPlanBySection(body, (err, dutyPlanResults) => {
             if (err) {
-                logger.errorLogger(err)
-                return res.status(200).json({
+                logger.errorLogger(err);
+                return res.status(500).json({
                     success: 0,
-                    message: err
+                    message: 'Internal server error while fetching Duty Plan',
                 });
             }
 
-            if (!results) {
-                logger.infoLogger("No Records Found")
+            if (!dutyPlanResults) {
+                logger.infoLogger("No Records Found in Duty Plan");
                 return res.status(200).json({
-                    succes: 2,
-                    messagee: "Record Not Found"
+                    success: 2,
+                    message: "Record Not Found in Duty Plan",
                 });
             }
 
-            return res.status(200).json({
-                succes: 1,
-                shiftdetail: results
-            });
+            // Step 2: Get Punch Master Data Section-Wise Duty Plan
+            getPunchMasterDataSectWiseDutyplan(body, (err, punchMasterResults) => {
+                if (err) {
+                    logger.errorLogger(err);
+                    return res.status(500).json({
+                        success: 0,
+                        message: 'Internal server error while fetching Punch Master Data',
+                    });
+                }
 
+                if (!punchMasterResults) {
+                    logger.infoLogger("No Records Found in Punch Master Data");
+                    return res.status(200).json({
+                        success: 2,
+                        message: "Record Not Found in Punch Master Data",
+                    });
+                }
+                // const obj = {
+                //     dutyPlanResults: dutyPlanResults?.length > 0 ? { dataStatus: true, dutyPlanResults } : { dataStatus: false, data: [] },
+                //     punchMasterResults: punchMasterResults?.length > 0 ? { dataStatus: true, punchMasterResults } : { dataStatus: false, data: [] },
+                // }
+                // console.log("obj", obj);
+
+                // Success: Return both results in a single array
+                // console.log("dutyPlanResults", dutyPlanResults?.length > 0);
+
+                // console.log("punchMasterResults", punchMasterResults?.length > 0);
+
+                return res.status(200).json({
+                    successStatus: 1,
+                    PunchMastDutyPlanDatas: {
+                        dutyPlanResults: dutyPlanResults?.length > 0 ? { dataStatus: true, dutyPlanResults } : { dataStatus: false, data: [] },
+                        punchMasterResults: punchMasterResults?.length > 0 ? { dataStatus: true, punchMasterResults } : { dataStatus: false, data: [] },
+                    }
+
+                });
+
+            });
         });
     },
+
+
+
+    // getDutyPlanBySection: (req, res) => {
+    //     const body = req.body;
+    //     getDutyPlanBySection(body, (err, results) => {
+    //         if (err) {
+    //             logger.errorLogger(err)
+    //             return res.status(200).json({
+    //                 success: 0,
+    //                 message: err
+    //             });
+    //         }
+
+    //         if (!results) {
+    //             logger.infoLogger("No Records Found")
+    //             return res.status(200).json({
+    //                 succes: 2,
+    //                 messagee: "Record Not Found"
+    //             });
+    //         }
+
+    //         return res.status(200).json({
+    //             succes: 1,
+    //             shiftdetail: results  
+    //         });
+
+    //     });
+    // },
 
     getPunchMastDataCheckWoff: (req, res) => {
         const body = req.body;
@@ -1647,6 +1715,8 @@ module.exports = {
         const { postData_getPunchData, processedData, max_late_day_count } = body;
         // console.log(processedData)
         monthlyUpdatePunchMaster(processedData).then(results => {
+            // console.log("processedData", processedData);
+
             if (results === 1) {
                 // GET PUNCH MASTER DATA 
                 getPData(postData_getPunchData, (err, punchMasterData) => {
@@ -1847,7 +1917,7 @@ module.exports = {
         const body = req.body;
         GetWOffPresentData(body, (err, results) => {
             if (err) {
-                console.log(err);
+                // console.log(err);
 
                 logger.errorLogger(err)
                 return res.status(400).json({
@@ -1869,5 +1939,90 @@ module.exports = {
                 data: results
             });
         });
+    },
+    getPreviousPunchDataEmCodeWise: (req, res) => {
+        const body = req.body;
+        getPreviousPunchDataEmCodeWise(body, (err, results) => {
+            if (err) {
+                logger.errorLogger(err)
+                return res.status(200).json({
+                    succs: 0,
+                    mesge: err
+                });
+            }
+
+            if (!results) {
+                return res.status(200).json({
+                    succs: 2,
+                    mesge: "Record Not Found"
+                });
+            }
+
+            return res.status(200).json({
+                succs: 1,
+                previous_punch_data: results
+            });
+
+        });
+    },
+
+    getPunchMasterDataSectWiseDutyplan: (req, res) => {
+        const body = req.body;
+        getPunchMasterDataSectWiseDutyplan(body, (err, results) => {
+            // console.log(results)
+            if (err) {
+                // logger.errorLogger(err)
+                return res.status(200).json({
+                    success: 0,
+                    message: err
+                });
+            }
+
+            if (!results) {
+                // logger.infoLogger("No Records Found")
+                return res.status(200).json({
+                    success: 2,
+                    message: "Record Not Found"
+                });
+            }
+
+            return res.status(200).json({
+                success: 1,
+                planData: results
+            });
+
+        });
+    },
+
+    UpdatedNoffStatusInDutyPlan: (req, res) => {
+        const body = req.body;
+        const result = UpdatedNoffStatusInDutyPlan(body)
+            .then((r) => {
+                return res.status(200).json({
+                    success: 1,
+                    message: r
+                });
+            }).catch((e) => {
+                return res.status(200).json({
+                    success: 0,
+                    message: e.sqlMessage
+                });
+            })
+    },
+
+    UpdatedPunchMasterLeavreqStaus: (req, res) => {
+        const body = req.body;
+        const result = UpdatedPunchMasterLeavreqStaus(body)
+            .then((r) => {
+                return res.status(200).json({
+                    succes: 1,
+                    message: r
+                });
+            }).catch((e) => {
+                return res.status(200).json({
+                    succes: 0,
+                    message: e.sqlMessage
+                });
+            })
     },
 }

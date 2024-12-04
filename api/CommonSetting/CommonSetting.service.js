@@ -112,9 +112,11 @@ module.exports = {
     },
     getCommonSettings: (callBack) => {
         pool.query(
-            `select * from setting_mast`,
+            `select setting_slno, cmmn_grace_period, cmmn_late_in, cmmn_early_out, cmmn_early_out_grace, cmmn_late_in_grace, creat_date, creat_user, update_user, carry_hl, carry_cl, carry_el, carry_sl, min_salary, max_salary, pf_age, pf_employee, pf_employer, esi_limit, esi_employee, esi_employer, noofadvanceinyear, verification_level, default_shift, notapplicable_shift, week_off_day, salary_above, leavetype_multiple, noff_selct_day_count, noff, group_slno, eoff, comp_day_count, comp_hour_count, holiday_policy_count, weekoff_policy_max_count, weekoff_policy_min_count, coff_min_working_hour, training_mastergroup, noff_count, pf_employee_amount, pf_employer_amount, onehour_rqst_count, areartype, max_late_day_count, leave_count, break_shift_taken_count, halfday_time_count, punch_taken_hour_count from setting_mast`,
             [],
             (error, results, feilds) => {
+                // console.log(results);
+
                 if (error) {
                     return callBack(error);
                 }
