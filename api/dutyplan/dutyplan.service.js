@@ -132,6 +132,7 @@ module.exports = {
     updateDutyPlan: (data) => {
         return new Promise((resolve, reject) => {
             data.map((val) => {
+                // console.log(val);
                 pool.query(
                     `update hrm_duty_plan
                             set shift_id=?,

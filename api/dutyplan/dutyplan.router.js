@@ -9,7 +9,7 @@ router.post("/", checkToken, getDutyPlan)
 router.post("/create", checkToken, getEmpdetl)
 router.post("/insert", checkToken, insertDutyplan)
 router.post("/planDetl", checkToken, getPlanDetl)
-router.patch("/", checkToken, updateDutyPlan)
+router.patch("/", checkToken, updateDutyPlan)//update duty plan
 router.post("/check", checkToken, CheckInsertVal)
 router.patch("/shiftupdate", checkToken, updateDefaultShift)
 router.patch("/woffupdate", checkToken, updateWoffShift)

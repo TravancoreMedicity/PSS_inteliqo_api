@@ -103,6 +103,7 @@ module.exports = {
     },
     updateDutyPlan: (req, res) => {
         const body = req.body;
+        // console.log("updateDutyPlan", body);
         const result = updateDutyPlan(body)
             .then((r) => {
                 return res.status(200).json({
