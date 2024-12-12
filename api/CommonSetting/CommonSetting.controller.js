@@ -62,6 +62,7 @@ module.exports = {
                     noff_selct_day_count: val.noff_selct_day_count,
                     noff: val.noff,
                     eoff: val.eoff,
+                    dayoff: val.dayoff,
                     comp_day_count: val.comp_day_count,
                     comp_hour_count: val.comp_hour_count,
                     holiday_policy_count: val.holiday_policy_count,
