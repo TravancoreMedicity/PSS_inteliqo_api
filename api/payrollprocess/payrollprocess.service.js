@@ -998,13 +998,31 @@ module.exports = {
     },
     getPunchByEmid: (data, callBack) => {
         pool.query(
-            `select punch_slno, duty_day,shift_id,punch_master.emp_id,punch_master.em_no,
-            hrm_emp_master.em_name,punch_in,
-            punch_out,shift_in,shift_out,hrs_worked,over_time,late_in,
-            early_out,duty_status,holiday_status,leave_status,holiday_slno,
-            lvereq_desc,duty_desc,lve_tble_updation_flag,hrm_emp_master.em_name
+            `select 
+            punch_slno, 
+            duty_day,
+            shift_id,
+            punch_master.emp_id,
+            punch_master.em_no,
+            hrm_emp_master.em_name,
+            punch_in,
+            punch_out,
+            shift_in,
+            shift_out,
+            hrs_worked,
+            over_time,
+            late_in,
+            early_out,
+            duty_status,
+            holiday_status,
+            leave_status,
+            holiday_slno,
+            lvereq_desc,
+            duty_desc,
+            lve_tble_updation_flag,
+            hrm_emp_master.em_name
             from  punch_master
-            left join hrm_emp_master on hrm_emp_master.em_no=punch_master.em_no
+            left join hrm_emp_master on hrm_emp_master.em_id=punch_master.emp_id
             where punch_master.emp_id IN (?)
                  and date(duty_day) between ? and ?`,
             [
