@@ -83,7 +83,11 @@ const {
     empLeaveData,
     sectionLeaveData,
     sectionMisspunchData,
-    sectionHalfdayData
+    sectionHalfdayData,
+    LeaveforHrApproval,
+    HalfdayforHrApproval,
+    MisspunchforHrApproval,
+    emOnehouryearwise
 } = require('../LeaveRequestApproval/LeaveRequestApproval.controller');
 
 
@@ -198,6 +202,7 @@ router.get("/employee/coffData/:id", checkToken, empCoffData)
 router.get("/employee/misspunchData/:id", checkToken, empMisspunchData)
 router.get("/employee/halfdayData/:id", checkToken, empHalfdayData)
 router.get("/employee/LeaveData/:id", checkToken, empLeaveData)
+router.get("/employee/onehour/:id", checkToken, emOnehouryearwise)
 
 
 router.post("/inchargeHod/coffData", checkToken, sectionCoffData)
@@ -205,6 +210,9 @@ router.post("/inchargeHod/leaveData", checkToken, sectionLeaveData)
 router.post("/inchargeHod/misspunchData", checkToken, sectionMisspunchData)
 router.post("/inchargeHod/halfday", checkToken, sectionHalfdayData)
 
+router.get("/approval/leave", checkToken, LeaveforHrApproval)
+router.get("/approval/halfday", checkToken, HalfdayforHrApproval)
+router.get("/approval/misspunch", checkToken, MisspunchforHrApproval)
 
 
 module.exports = router;
