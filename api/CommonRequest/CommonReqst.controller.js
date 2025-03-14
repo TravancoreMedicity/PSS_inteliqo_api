@@ -6,9 +6,10 @@ const { create, checkInsertVal, createGenralRq, createOndutyRequest, createEnabl
     addHrComment, checkingAttendanceMarking, HRNopunchMasterIn, HRNopunchMasterOut,
     checkMispunchRequest, checksEnableRq, punchdataEntry, HROnDutyPunchMaster,
     checkAttendanceProcess, generalHRapproval, cancelEnable, enableOnduty, cancelOnehour,
-    cancelgeneral, checkPunchMarkingHR
+    cancelgeneral, checkPunchMarkingHR, OneHourForApprovalHR
 } = require('../CommonRequest/CommonReqst.service')
-const { validateOneHourReqst } = require('../../validation/validation_schema')
+const { validateOneHourReqst } = require('../../validation/validation_schema');
+const { HRhalfDayPuchMast } = require('../LeaveRequestApproval/LeaveRequestApproval.service');
 
 module.exports = {
     create: (req, res) => {
@@ -529,100 +530,43 @@ module.exports = {
     },
     addHrComment: (req, res) => {
         const body = req.body;
-        // addHrComment(body, (err, results) => {
-        //     if (err) {
-        //         logger.errorLogger(err)
-        //         return res.status(200).json({
-        //             success: 0,
-        //             message: err
-        //         });
-        //     }
-        //     else if (!results) {
-        //         return res.status(200).json({
-        //             success: 2,
-        //             message: "Record Not Found"
-        //         });
-        //     }
-        //     else {
-
-        if (body.checkinflag === 1) {
-            HRNopunchMasterIn(body, (err, results) => {
-                if (err) {
-                    logger.errorLogger(err)
-                    return res.status(200).json({
-                        success: 0,
-                        message: err
-                    });
-                }
-                else if (!results) {
-                    return res.status(200).json({
-                        success: 2,
-                        message: "Record Not Found"
-                    });
-                }
-                else {
-                    addHrComment(body, (err, results) => {
-                        if (err) {
-                            logger.errorLogger(err)
-                            return res.status(200).json({
-                                success: 0,
-                                message: err
-                            });
-                        }
-                        else if (!results) {
-                            return res.status(200).json({
-                                success: 2,
-                                message: "Record Not Found"
-                            });
-                        }
+        // if (body.checkinflag === 1) {
+        HRhalfDayPuchMast(body, (err, results) => {
+            if (err) {
+                logger.errorLogger(err)
+                return res.status(200).json({
+                    success: 0,
+                    message: err
+                });
+            }
+            else if (!results) {
+                return res.status(200).json({
+                    success: 2,
+                    message: "Record Not Found"
+                });
+            }
+            else {
+                addHrComment(body, (err, results) => {
+                    if (err) {
+                        logger.errorLogger(err)
                         return res.status(200).json({
-                            success: 1,
-                            message: "Lve Master table Updated"
+                            success: 0,
+                            message: err
                         });
-                    })
-                }
-            });
-
-        }
-        else if (body.checkoutflag === 1) {
-
-            HRNopunchMasterOut(body, (err, results) => {
-                if (err) {
-                    logger.errorLogger(err)
-                    return res.status(200).json({
-                        success: 0,
-                        message: err
-                    });
-                }
-                else if (!results) {
-                    return res.status(200).json({
-                        success: 2,
-                        message: "Record Not Found"
-                    });
-                }
-                else {
-                    addHrComment(body, (err, results) => {
-                        if (err) {
-                            logger.errorLogger(err)
-                            return res.status(200).json({
-                                success: 0,
-                                message: err
-                            });
-                        }
-                        else if (!results) {
-                            return res.status(200).json({
-                                success: 2,
-                                message: "Record Not Found"
-                            });
-                        }
+                    }
+                    else if (!results) {
                         return res.status(200).json({
-                            success: 1,
-                            message: "Lve Master table Updated"
+                            success: 2,
+                            message: "Record Not Found"
                         });
-                    })
-                }
-            });
-        }
+                    }
+                    return res.status(200).json({
+                        success: 1,
+                        message: "Lve Master table Updated"
+                    });
+                })
+            }
+        });
     },
     checkMispunchRequest: (req, res) => {
 
@@ -883,6 +827,29 @@ module.exports = {
                 });
 
             }
+        });
+    },
+    OneHourForApprovalHR: (req, res) => {
+        OneHourForApprovalHR((err, results) => {
+            if (err) {
+                logger.errorLogger(err)
+                return res.status(200).json({
+                    success: 2,
+                    message: err
+                });
+            }
+
+            if (!results) {
+                return res.status(200).json({
+                    success: 0,
+                    message: "No Results Found"
+                });
+            }
+
+            return res.status(200).json({
+                success: 1,
+                data: results
+            });
         });
     },
 }

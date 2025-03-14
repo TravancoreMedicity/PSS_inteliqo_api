@@ -1216,7 +1216,7 @@ const validatecommonsettings = Joi.object({
         noff_selct_day_count: Joi.number().optional(),
         noff: Joi.number().optional(),
         group_slno: Joi.optional(),
-        eoff: Joi.number().optional(),
+        dutyoff: Joi.number().optional(),
         comp_day_count: Joi.number().optional(),
         comp_hour_count: Joi.number().optional(),
         training_mastergroup: Joi.optional(),
@@ -1227,6 +1227,7 @@ const validatecommonsettings = Joi.object({
         break_shift_taken_count: Joi.number().optional(),
         halfday_time_count: Joi.number().optional(),
         punch_taken_hour_count: Joi.number().optional(),
+        week_off_count: Joi.number().optional(),
 })
 //validate carryforward
 const validatecarryforward = Joi.object({

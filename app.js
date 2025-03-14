@@ -145,6 +145,7 @@ const TrainingDashboard = require("./api/TrainingDashboard/TrainingDashboard.rou
 const AttendenceReport = require("./api/AttendenceReport/AttendenceReport.router")
 const NightOff = require("./api/Night_OFF/night_off.router")
 const ManualrequestUpload = require("./api/ManualRequest/Manual.router")
+const OnObservationRequest = require("./api/OnobservationRequest/OnobservationRouter")
 
 app.use(express.json({ limit: '50mb' }));
 app.use((req, res, next) => {
@@ -327,6 +328,7 @@ app.use("/api/TrainingDashboard", TrainingDashboard)
 app.use("/api/AttendenceReport", AttendenceReport)
 app.use("/api/NightOff", NightOff)
 app.use("/api/manualRequest", ManualrequestUpload)
+app.use("/api/OnObservationRequest", OnObservationRequest)
 
 // ------ Database Connection --------
 

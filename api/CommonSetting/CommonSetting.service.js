@@ -40,7 +40,7 @@ module.exports = {
                 noff_selct_day_count,
                 noff,
                 group_slno,
-                eoff,
+                dutyoff,
                 comp_day_count,
                 comp_hour_count,
                 holiday_policy_count,
@@ -49,9 +49,10 @@ module.exports = {
                 coff_min_working_hour,
                 training_mastergroup,
                 break_shift_taken_count,
-                punch_taken_hour_count
+                punch_taken_hour_count,
+                week_off_count
                 )
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
         )
 
         [
@@ -90,7 +91,7 @@ module.exports = {
             data.noff_selct_day_count,
             data.noff,
             JSON.stringify(data.group_slno),
-            data.eoff,
+            data.dutyoff,
             data.comp_day_count,
             data.comp_hour_count,
             JSON.stringify(data.training_mastergroup),
@@ -100,7 +101,8 @@ module.exports = {
             data.coff_min_working_hour,
             data.break_shift_taken_count,
             data.halfday_time_count,
-            data.punch_taken_hour_count
+            data.punch_taken_hour_count,
+            data.week_off_count
         ],
             (error, results, feilds) => {
                 if (error) {
@@ -160,7 +162,7 @@ module.exports = {
                 noff_selct_day_count=?,
                 noff=?,
                 group_slno=?,
-                eoff=?,
+                dutyoff=?,
                 comp_day_count=?,
                 comp_hour_count=?,
                 holiday_policy_count=?,
@@ -170,7 +172,8 @@ module.exports = {
                 training_mastergroup=?,
                 break_shift_taken_count=?,
                 halfday_time_count=?,
-                punch_taken_hour_count=?
+                punch_taken_hour_count=?,
+                week_off_count=?
                 WHERE setting_slno =?`,
 
             [
@@ -209,7 +212,7 @@ module.exports = {
                 data.noff_selct_day_count,
                 data.noff,
                 JSON.stringify(data.group_slno),
-                data.eoff,
+                data.dutyoff,
                 data.comp_day_count,
                 data.comp_hour_count,
                 data.holiday_policy_count,
@@ -220,6 +223,7 @@ module.exports = {
                 data.break_shift_taken_count,
                 data.halfday_time_count,
                 data.punch_taken_hour_count,
+                data.week_off_count,
                 data.setting_slno
             ],
             (error, results, feilds) => {
