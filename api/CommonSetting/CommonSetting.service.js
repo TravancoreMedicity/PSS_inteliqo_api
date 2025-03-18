@@ -50,9 +50,10 @@ module.exports = {
                 training_mastergroup,
                 break_shift_taken_count,
                 punch_taken_hour_count,
-                week_off_count
+                week_off_count,
+                extra_off
                 )
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
         )
 
         [
@@ -102,7 +103,8 @@ module.exports = {
             data.break_shift_taken_count,
             data.halfday_time_count,
             data.punch_taken_hour_count,
-            data.week_off_count
+            data.week_off_count,
+            data.extra_off
         ],
             (error, results, feilds) => {
                 if (error) {
@@ -173,7 +175,8 @@ module.exports = {
                 break_shift_taken_count=?,
                 halfday_time_count=?,
                 punch_taken_hour_count=?,
-                week_off_count=?
+                week_off_count=?,
+                extra_off=?
                 WHERE setting_slno =?`,
 
             [
@@ -224,6 +227,7 @@ module.exports = {
                 data.halfday_time_count,
                 data.punch_taken_hour_count,
                 data.week_off_count,
+                data.extra_off,
                 data.setting_slno
             ],
             (error, results, feilds) => {
