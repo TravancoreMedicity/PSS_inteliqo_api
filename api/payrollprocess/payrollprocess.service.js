@@ -1090,28 +1090,39 @@ module.exports = {
         pool.query(
             `select hrm_emp_master.em_no,
             em_name,
+            em_name as emp_name,
             gross_salary,
             hrm_emp_master.em_id ,
             branch_name,
             dept_name ,
             sect_name,
             ecat_name,
+            desg_name,
             inst_emp_type,
             COALESCE(em_account_no,0) em_account_no,
+            COALESCE(em_ifsc,0) em_ifsc,
             COALESCE(nps,0) nps,
             COALESCE(npsamount,0)npsamount,
             COALESCE(lwf_status,0)lwf_status,
-            COALESCE(lwfamount,0)lwfamount             
+            COALESCE(lwfamount,0)lwfamount,
+            hrm_branch.branch_slno,
+            hrm_emp_category.category_slno,
+            hrm_department.dept_id,
+            designation.desg_slno,
+            hrm_dept_section.sect_id,
+            institution_type.inst_slno                   
             FROM hrm_emp_master 
             left join hrm_branch on hrm_branch.branch_slno=hrm_emp_master.em_branch
             left join hrm_emp_category on hrm_emp_category.category_slno=hrm_emp_master.em_category
             left join hrm_department on hrm_department.dept_id=hrm_emp_master.em_department
             left join hrm_dept_section on hrm_dept_section.sect_id=hrm_emp_master.em_dept_section
+            left join designation on designation.desg_slno=hrm_emp_master.em_designation
             left join institution_type on institution_type.inst_slno=hrm_emp_master.em_institution_type
             left join hrm_emp_personal on hrm_emp_personal.em_id=hrm_emp_master.em_id
             left join hrm_emp_pfesi on hrm_emp_pfesi.em_id=hrm_emp_master.em_id
             where hrm_emp_master.em_department IN (?)
-            and hrm_emp_master.em_dept_section IN (?)  and em_status=1  and hrm_emp_master.em_no!=1 and doctor_status=0
+            and hrm_emp_master.em_dept_section IN (?)  and em_status=1  
+            and hrm_emp_master.em_no!=1 and doctor_status=0
             group by hrm_emp_master.em_no,
             em_name,
             gross_salary,
@@ -1292,6 +1303,195 @@ module.exports = {
             [
                 data.em_no,
                 data.from
+            ],
+            (error, results, feilds) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        )
+    },
+    getProcessedDepartments: (data, callBack) => {
+        pool.query(
+            `SELECT
+            dept_id,
+            sect_id,
+            salary_month,
+            salary_status,
+            last_update_date
+            FROM payroll_processed_salary 
+            WHERE salary_month = ? `,
+            [
+                data.month
+            ],
+            (error, results, feilds) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        )
+    },
+    submitProcessedSalary: (data, callBack) => {
+        pool.query(
+            `INSERT INTO hrm_processed_salary_details (
+                em_id,
+                em_no,
+                branch_id,
+                dept_id,
+                sect_id,
+                category_id,
+                designation_id,
+                institution_slno,
+                account_number,
+                ifsc_number,
+                total_days,
+                leave_count,
+                eligibile_woff_count,
+                taken_woff_count,
+                remaining_woff_count,
+                dp_count,
+                eligible_doff_count,
+                taken_doff_count,
+                remaining_doff_count,
+                total_lop_count,
+                total_pay_days,
+                lop_amount,
+                gross_salary,
+                total_salary,
+                processed_month
+                )
+            VALUES ?;`,
+            [
+                data
+            ],
+            (error, results, feilds) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        )
+    },
+    inertMonthlyProcess: (data, callBack) => {
+        pool.query(
+            `INSERT INTO payroll_processed_salary (salary_month,dept_id,sect_id,salary_status,create_user,update_user,last_update_date)
+            VALUES ?`,
+            [
+                data
+            ],
+            (error, results, feilds) => {
+
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        )
+    },
+    deleteProcessedSalary: (data, callBack) => {
+        pool.query(
+            ` DELETE FROM hrm_processed_salary_details
+            WHERE dept_id = ? AND sect_id = ? AND processed_month=?`,
+            [
+                data.dept_id,
+                data.sect_id,
+                data.processed_month
+            ],
+            (error, results, feilds) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        )
+    },
+    CancelPayrollProcess: (data, callBack) => {
+        pool.query(
+            `update payroll_processed_salary 
+            set salary_status=0 ,
+            update_user=?
+            where dept_id=? and sect_id=? and salary_month=?`,
+            [
+                data.update_user,
+                data.dept_id,
+                data.sect_id,
+                data.processed_month
+            ],
+            (error, results, feilds) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        )
+    },
+    ActivatePayrollProcess: (data, callBack) => {
+        pool.query(
+            `update payroll_processed_salary 
+            set salary_status=1 ,
+            update_user=?
+            where dept_id=? and sect_id=? and salary_month=?`,
+            [
+                data.update_user,
+                data.dept_id,
+                data.sect_id,
+                data.processed_month
+            ],
+            (error, results, feilds) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        )
+    },
+    getPayrollDetailsByDept: (data, callBack) => {
+        pool.query(
+            `SELECT 
+            hrm_processed_salary_details.em_no,
+            em_name,
+            branch_name,
+            dept_name,
+            sect_name,
+            ecat_name,
+            desg_name,
+            inst_emp_type
+            account_number,
+            ifsc_number,
+            total_days,
+            leave_count,
+            eligibile_woff_count,
+            taken_woff_count,
+            remaining_woff_count,
+            total_lop_count,
+            total_pay_days,
+            dp_count,
+            eligible_doff_count,
+            taken_doff_count,
+            remaining_doff_count,
+            hrm_processed_salary_details.gross_salary,
+            total_salary,
+            total_pay_days,
+            lop_amount,
+            inst_emp_type,
+            em_account_no,
+            total_salary
+             FROM hrm_processed_salary_details 
+             left join hrm_emp_master on hrm_emp_master.em_id=hrm_processed_salary_details.em_id
+             left join hrm_branch on hrm_branch.branch_slno=hrm_processed_salary_details.branch_id
+             left join hrm_department on hrm_department.dept_id=hrm_processed_salary_details.dept_id
+             left join hrm_dept_section on hrm_dept_section.sect_id=hrm_processed_salary_details.sect_id
+             left join hrm_emp_category on hrm_emp_category.category_slno=hrm_processed_salary_details.category_id
+             left join designation on designation.desg_slno=hrm_processed_salary_details.designation_id
+             left join institution_type on institution_type.inst_slno=hrm_processed_salary_details.institution_slno
+             left join hrm_emp_personal on hrm_emp_personal.em_id=hrm_emp_master.em_id
+             where processed_month=? and hrm_processed_salary_details.dept_id=? and hrm_processed_salary_details.sect_id=?`,
+            [
+                data.month,
+                data.dept_id,
+                data.sect_id
             ],
             (error, results, feilds) => {
                 if (error) {
