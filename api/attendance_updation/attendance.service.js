@@ -550,8 +550,10 @@ module.exports = {
                 holiday_status,
                 leave_status,
                 lvereq_desc,
-                lve_tble_updation_flag
+                lve_tble_updation_flag,
+                night_off_flag
             FROM punch_master 
+            inner join hrm_shift_mast on hrm_shift_mast.shft_slno=punch_master.shift_id
             WHERE em_no IN (?) and date(duty_day) between date(?) and date(?)`,
             [
                 data.empList,
@@ -1249,8 +1251,11 @@ module.exports = {
                 holiday_status,
                 leave_status,
                 lvereq_desc,
-                lve_tble_updation_flag            
-            FROM punch_master 
+                lve_tble_updation_flag,
+                shft_desc, 
+                break_shift_status            
+            FROM punch_master
+            inner join hrm_shift_mast on hrm_shift_mast.shft_slno=punch_master.shift_id 
             WHERE duty_day >= ? and duty_day <= ?
             AND em_no IN (?)`,
             [
