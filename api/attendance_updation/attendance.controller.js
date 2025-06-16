@@ -988,9 +988,8 @@ module.exports = {
     getPunchMasterDataSectionWise: (req, res) => {
         const body = req.body;
         getPunchMastData(body, (err, results) => {
-            // console.log(results)
+
             if (err) {
-                // logger.errorLogger(err)
                 return res.status(200).json({
                     success: 0,
                     message: err
@@ -998,7 +997,6 @@ module.exports = {
             }
 
             if (!results) {
-                // logger.infoLogger("No Records Found")
                 return res.status(200).json({
                     success: 2,
                     message: "Record Not Found"
