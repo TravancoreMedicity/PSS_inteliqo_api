@@ -11,8 +11,9 @@ module.exports = {
             authorization_incharge,
             authorization_hod,
             sect_status,
-            create_user)
-            VALUES(?,?,?,?,?,?,?)`,
+            create_user,
+            woffcount)
+            VALUES(?,?,?,?,?,?,?,?)`,
             [
                 data.sect_name,
                 data.dept_id,
@@ -20,7 +21,8 @@ module.exports = {
                 data.authorization_incharge,
                 data.authorization_hod,
                 data.sect_status,
-                data.create_user
+                data.create_user,
+                data.woffcount
             ],
             (error, results, feilds) => {
                 if (error) {
@@ -39,7 +41,8 @@ module.exports = {
                     authorization_incharge = ?,
                     authorization_hod = ?,
                     sect_status = ?,
-                    edit_user = ?
+                    edit_user = ?,
+                    woffcount=?
                 WHERE sect_id = ?`,
             [
                 data.sect_name,
@@ -49,6 +52,7 @@ module.exports = {
                 data.authorization_hod,
                 data.sect_status,
                 data.edit_user,
+                data.woffcount,
                 data.sect_id
             ],
             (error, results, feilds) => {
@@ -86,7 +90,8 @@ module.exports = {
             hrm_department.dept_name,
             if(authorization_incharge=1,'Yes','No')incharge,
             if(authorization_hod=1,'Yes','No')hod,
-            if(sect_status = 1,'Yes','No') status
+            if(sect_status = 1,'Yes','No') status,
+            woffcount
         FROM hrm_dept_section
         LEFT JOIN hrm_department ON hrm_dept_section.dept_id = hrm_department.dept_id`,
             [],

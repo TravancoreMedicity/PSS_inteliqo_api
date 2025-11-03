@@ -86,7 +86,8 @@ const validateSection = Joi.object({
         sect_id: Joi.optional(),
         create_user: Joi.number().optional(),
         edit_user: Joi.number().optional(),
-        dept_sub_sect: Joi.number().required()
+        dept_sub_sect: Joi.number().required(),
+        woffcount:Joi.number().required(),
 });
 
 const validateMenuName = Joi.object({

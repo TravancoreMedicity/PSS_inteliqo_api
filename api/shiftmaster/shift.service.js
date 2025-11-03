@@ -217,7 +217,7 @@ module.exports = {
                 noff_min_days,
                 noff_max_days,
                 night_off_flag
-                FROM hrm_shift_mast
+                FROM hrm_shift_mast where shft_status=1
             `,
             [],
             (error, results, feilds) => {
