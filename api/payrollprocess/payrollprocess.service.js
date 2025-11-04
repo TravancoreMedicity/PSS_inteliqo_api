@@ -1023,7 +1023,8 @@ module.exports = {
             hrm_emp_master.em_name,
             shft_desc,
             shift_duration_in_min,
-            night_off_flag
+            night_off_flag,
+            shft_duty_day
             from  punch_master
             left join hrm_emp_master on hrm_emp_master.em_id=punch_master.emp_id
             left join hrm_shift_mast on hrm_shift_mast.shft_slno=punch_master.shift_id
