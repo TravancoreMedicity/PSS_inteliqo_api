@@ -1195,8 +1195,7 @@ module.exports = {
     },
     getPunchAboveSelectedDate: (req, res) => {
         const body = req.body;
-        console.log(body);
-        getPunchAboveSelectedDate(body, (err, results) => {
+            getPunchAboveSelectedDate(body, (err, results) => {
             if (err) {
                 return res.status(200).json({
                     success: 0,

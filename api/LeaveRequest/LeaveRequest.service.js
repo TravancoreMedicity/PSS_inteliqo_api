@@ -722,7 +722,6 @@ module.exports = {
 
         try {
             const result = await Promise.all(promises);
-            // console.log('Inserted records:', result);
             return { status: 1, message: 'success' };
         } catch (error) {
             return { status: 0, message: error };
