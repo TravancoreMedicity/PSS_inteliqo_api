@@ -1266,7 +1266,8 @@ module.exports = {
                 value.lopAmount,
                 value.empSalary,
                 value.totalSalary,
-                value.processed_month
+                value.processed_month,
+                value.totalHD
             ]
         })
         submitProcessedSalary(values, (err, results) => {
