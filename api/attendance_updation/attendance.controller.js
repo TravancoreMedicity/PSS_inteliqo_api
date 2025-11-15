@@ -508,7 +508,6 @@ module.exports = {
 
                 getpunchmastdataupload(employedata, (err, punchmast) => {
                     const punchmastjson = JSON.parse(punchmast);
-                    // console.log(punchmastjson)
                     if (punchmastjson.length === 0) {
                         return res.status(200).json({
                             success: 1,
@@ -630,7 +629,6 @@ module.exports = {
                                 })
                                 const result = updatePunchDetails(dataupload, res)
                                     .then((r) => {
-                                        // console.log(res)
                                         return res.status(200).json({
                                             success: 1,
                                             message: r
@@ -1616,7 +1614,6 @@ module.exports = {
     getPData: (req, res) => {
         const body = req.body;
         getPData(body, (err, results) => {
-            // console.log(results)
             if (err) {
                 // logger.errorLogger(err)
                 return res.status(200).json({
@@ -1642,13 +1639,11 @@ module.exports = {
     },
     monthlyUpdatePunchMaster: async (req, res) => {
         const body = req.body;
-        const { postData_getPunchData, processedData, max_late_day_count } = body;
-        // console.log(processedData)
+        const { postData_getPunchData, processedData, max_late_day_count } = body;  
         monthlyUpdatePunchMaster(processedData).then(results => {
             if (results === 1) {
                 // GET PUNCH MASTER DATA 
                 getPData(postData_getPunchData, (err, punchMasterData) => {
-                    // console.log(punchMasterData)
                     if (err) {
                         // logger.errorLogger(err)
                         return res.status(200).json({
@@ -1658,7 +1653,6 @@ module.exports = {
                         });
                     }
 
-                    // console.log(punchMasterData)
                     if (punchMasterData === null && punchMasterData === undefined && punchMasterData?.length === 0) {
                         // logger.infoLogger("No Records Found")
                         // return res.status(200).json({
@@ -1672,7 +1666,6 @@ module.exports = {
                         });
                     }
 
-                    // console.log(punchMasterData)
                     // IF GET PUNCH MASTER DATA IS TRUE  // IF DATA
                     if (punchMasterData !== null && punchMasterData !== undefined && punchMasterData?.length > 0) {
                         //CALCULATE CALCULATED HD BASED ON LATE COMMING
@@ -1699,7 +1692,6 @@ module.exports = {
                             ?.filter((e) => e.lvereq_desc === 'HD' && e.duty_desc === 'LC')
                             ?.map((e) => e.punch_slno)
                         // UPDATE CALCULATED HD (LOP) IN PUNCH MASTER
-                        // console.log(calCulatedHD)
                         if (calCulatedHD !== null && calCulatedHD !== undefined && calCulatedHD?.length > 0) {
                             //update function for punch master table
 
@@ -1719,7 +1711,6 @@ module.exports = {
                                             lvereq_desc: calCulatedHD?.includes(e.punch_slno) ? 'HD' : e.lvereq_desc
                                         }
                                     })
-                                    // console.log(updatedPunchMasterData)
                                     return res.status(200).json({
                                         success: 1,
                                         message: 'Update Successfully',
@@ -1845,7 +1836,6 @@ module.exports = {
         const body = req.body;
         GetWOffPresentData(body, (err, results) => {
             if (err) {
-                console.log(err);
 
                 logger.errorLogger(err)
                 return res.status(400).json({

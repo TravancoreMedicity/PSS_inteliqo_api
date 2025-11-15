@@ -458,8 +458,7 @@ module.exports = {
     },
     getSpecialization: (req, res) => {
         const body = req.body
-        // console.log(body);
-        getSpecialization(body, (err, results) => {
+         getSpecialization(body, (err, results) => {
             if (err) {
                 // logger.errorLogger(err)
                 return res.status(200).json({

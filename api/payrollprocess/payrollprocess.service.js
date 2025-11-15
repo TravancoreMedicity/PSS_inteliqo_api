@@ -1365,7 +1365,8 @@ module.exports = {
                 lop_amount,
                 gross_salary,
                 total_salary,
-                processed_month
+                processed_month,
+                halfday_count
                 )
             VALUES ?;`,
             [

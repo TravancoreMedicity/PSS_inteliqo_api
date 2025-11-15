@@ -561,7 +561,6 @@ module.exports = {
                 data.toDate_punchMaster,
             ],
             (error, results, feilds) => {
-                // console.log(results)
                 if (error) {
                     return callBack(error);
                 }
@@ -1038,7 +1037,6 @@ module.exports = {
         )
     },
     updatePunchMarkingHR: (data, callBack) => {
-        // console.log(data)
         pool.query(
             `UPDATE punchmarking_hr
                 SET status = 1,
@@ -1161,7 +1159,6 @@ module.exports = {
                 )
             })
         })).then((updateResult) => {
-            // console.log(updateResult)
             const dbUpdateResult = updateResult?.find(e => e.status === 'rejected')
             if (dbUpdateResult === undefined) {
                 return 1
@@ -1231,7 +1228,6 @@ module.exports = {
     // lvereq_desc,
     // lve_tble_updation_flag
     getPData: (data, callBack) => {
-        // console.log("data", data)
         pool.query(
             `SELECT 
                 punch_slno,
@@ -1264,7 +1260,6 @@ module.exports = {
                 data.empList
             ],
             (error, datas, feilds) => {
-                // console.log(datas)
                 if (error) {
                     return callBack(error);
                 }
