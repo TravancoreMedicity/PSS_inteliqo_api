@@ -2046,6 +2046,7 @@ module.exports = {
             `UPDATE punch_master
             SET punch_out =null,
             punch_in=null,
+            leave_status=null,
             lve_tble_updation_flag=0
         WHERE punch_slno=?`,
             [
